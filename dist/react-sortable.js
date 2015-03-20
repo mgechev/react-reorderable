@@ -51,6 +51,7 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
   },
   componentWillMount: function () {
     this._indexChildren(this.props.children)
+    window.addEventListener('mouseup');
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.children) {
@@ -69,40 +70,40 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
     });
   },
   onDrag: function (e) {
-    var currentNextNode = this.activeNode.nextSibling;
-    var nextNode = getNextNode(this.activeNode);
+    var currentNextNode = this.activeItem.nextSibling;
+    var nextNode = getNextNode(this.refs.handle.getDOMNode());
+
+    console.log(this.refs.handle);
 
     if (currentNextNode === nextNode) {
       return;
     }
 
-    var id = this.activeNode.getAttribute('key');
+    var id = this.activeItem.getAttribute('data-sortable-key');
     var order = this.state.order;
     var afterIdx = order.length;
     order.splice(order.indexOf(id), 1);
     if (nextNode) {
-      afterIdx = order.indexOf(nextNode.getAttribute('key'));
+      afterIdx = order.indexOf(nextNode.getAttribute('data-sortable-key'));
     }
     order.splice(afterIdx, 0, id);
 
     var self = this;
     this.setState({
       order: order
-    }, function () {
-      console.log(this.activeNode.innerText);
     });
   },
   onMouseDown: function (e) {
     this.setState({
-      initailCoordinates: {
+      initialCoordinates: {
         x: e.clientX,
         y: e.clientY
       }
     });
   },
   onMouseMove: function (e) {
-    if (!this.state.active) {
-      var initial = this.state.initailCoordinates;
+    if (!this.state.activeItem) {
+      var initial = this.state.initialCoordinates;
       // Still not clicked
       if (!initial) {
         return;
@@ -110,11 +111,19 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
       if (Math.abs(e.clientX - initial.x) >= 5 ||
           Math.abs(e.clientY - initial.y) >= 5) {
         var node = getClosestSortable(e.target);
+        var rect = node.getBoundingClientRect();
+        var nativeEvent = e.nativeEvent;
+        this.activeItem = node;
         this.setState({
-          activeItem: node.getAttribute('data-sortable-key')
+          initialCoordinates: null,
+          activeItem: node.getAttribute('data-sortable-key'),
+          startPosition: {
+            x: rect.left,
+            y: rect.top
+          }
         }, function () {
-          console.log(this.refs.handle);
-          this.refs.handle.handleDragStart(e);
+          // React resets the event's properties
+          this.refs.handle.handleDragStart(nativeEvent);
         }.bind(this));
       }
     }
@@ -133,14 +142,15 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
     }, this);
     var handle;
     if (this.state.activeItem) {
+      var pos = this.state.startPosition;
       handle = React.addons.cloneWithProps(this.sortableMap[this.state.activeItem], {
         className: 'react-sortable-handle'
       });
-      var initial = this.state.initailCoordinates;
       handle =
         React.createElement(ReactDrag, {onStop: this.onDragStop, 
+          onDrag: this.onDrag, 
           ref: "handle", 
-          startX: initial.x, startY: initial.y}, 
+          start: { x: pos.x, y: pos.y}}, 
           handle
         );
     }
