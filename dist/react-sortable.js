@@ -111,8 +111,9 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
     this.activeNode = node;
   },
   onDragStop: function (e) {
-    var node = getClosestSortable(e.target);
-    node.style.position = 'static';
+    this.activeNode.style.position = 'static';
+    this.activeNode.style.left = '0px';
+    this.activeNode.style.top = '0px';
     this.activeNode = null;
   },
   onDrag: function (e) {
