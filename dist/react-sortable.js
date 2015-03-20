@@ -18,7 +18,8 @@ function getNextNode(node) {
   var offsetTop = node.offsetTop;
   for (var i = 0; i < siblings.length; i += 1) {
     current = siblings[i];
-    if (current.getAttribute('data-sortable-key') !== node.getAttribute('data-sortable-key')) {
+    if (current.getAttribute('data-sortable-key') !==
+        node.getAttribute('data-sortable-key')) {
       var diff = current.offsetTop - offsetTop;
       if (diff > 0 && diff < minDistance) {
         minDistance = diff;
@@ -70,32 +71,24 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
     });
   },
   onDrag: function (e) {
-    var currentNextNode = this.activeItem.nextSibling;
     var nextNode = getNextNode(this.refs.handle.getDOMNode());
+    var currentKey = this.refs.handle.getDOMNode().getAttribute('data-sortable-key');
 
-    console.log(this.refs.handle);
+    var currentPos = this.state.order.indexOf(currentKey);
+    this.state.order.splice(currentPos, 1);
 
-    if (currentNextNode === nextNode) {
-      return;
-    }
-
-    var id = this.activeItem.getAttribute('data-sortable-key');
-    var order = this.state.order;
-    var afterIdx = order.length;
-    order.splice(order.indexOf(id), 1);
+    var nextKey = null;
+    var nextPos = this.state.order.length;
     if (nextNode) {
-      afterIdx = order.indexOf(nextNode.getAttribute('data-sortable-key'));
+      nextKey = nextNode.getAttribute('data-sortable-key');
+      nextPos = this.state.order.indexOf(nextKey);
     }
-    order.splice(afterIdx, 0, id);
 
-    var self = this;
-    this.setState({
-      order: order
-    });
+    this.state.order.splice(nextPos, 0, currentKey);
   },
   onMouseDown: function (e) {
     this.setState({
-      initialCoordinates: {
+      mouseDownPosition: {
         x: e.clientX,
         y: e.clientY
       }
@@ -103,7 +96,7 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
   },
   onMouseMove: function (e) {
     if (!this.state.activeItem) {
-      var initial = this.state.initialCoordinates;
+      var initial = this.state.mouseDownPosition;
       // Still not clicked
       if (!initial) {
         return;
@@ -115,7 +108,7 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
         var nativeEvent = e.nativeEvent;
         this.activeItem = node;
         this.setState({
-          initialCoordinates: null,
+          mouseDownPosition: null,
           activeItem: node.getAttribute('data-sortable-key'),
           startPosition: {
             x: rect.left,
