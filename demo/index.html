@@ -7,16 +7,19 @@
 .draggable-element {
   width: 150px;
   height: 70px;
-  background-color: red;
+  background-color: #990000;
   margin-top: 5px;
+  border: 1px solid #444;
 }
 .draggable-handle {
   background-color: grey;
-  width: 50px;
+  width: 30px;
   height: 50px;
   float: left;
-  margin: 10px;
   cursor: move;
+  color: white;
+  font-size: 60px;
+  padding: 10px;
 }
   </style>
 </head>
@@ -32,19 +35,19 @@ React.render(
       },
       React.createElement('div', {
           className: 'draggable-element'
-        }, null, React.createElement('div', { className: 'draggable-handle' })
+        }, null, React.createElement('div', { className: 'draggable-handle' }, 1)
       ),
       React.createElement('div', {
           className: 'draggable-element'
-        }, null, React.createElement('div', { className: 'draggable-handle' })
+        }, null, React.createElement('div', { className: 'draggable-handle' }, 2)
       ),
       React.createElement('div', {
           className: 'draggable-element'
-        }, null, React.createElement('div', { className: 'draggable-handle' })
+        }, null, React.createElement('div', { className: 'draggable-handle' }, 3)
       ),
       React.createElement('div', {
           className: 'draggable-element'
-        }, null, React.createElement('div', { className: 'draggable-handle' })
+        }, null, React.createElement('div', { className: 'draggable-handle' }, 4)
       )
   )
 , document.getElementById('content'));
