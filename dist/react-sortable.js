@@ -20,6 +20,10 @@ function getCurrentPosition(node) {
       };
     }
   }
+  return {
+    prev: null,
+    next: null
+  };
 }
 
 function getNodePosition(node) {
@@ -38,9 +42,9 @@ function getNextNode(node) {
   for (var i = 0; i < siblings.length; i += 1) {
     current = siblings[i];
     if (current !== node) {
-      if (current.offsetY > node.offsetY &&
-          current.offsetY - node.offsetY < minDistance) {
-        minDistance = current.offsetY - node.offsetY;
+      if (current.offsetTop > node.offsetTop &&
+          current.offsetTop - node.offsetTop < minDistance) {
+        minDistance = current.offsetTop - node.offsetTop;
         next = current;
       }
     }
@@ -57,9 +61,9 @@ function getPrevNode(node) {
   for (var i = siblings.length - 1; i >= 0; i -= 1) {
     current = siblings[i];
     if (current !== node) {
-      if (current.offsetY < node.offsetY &&
-          node.offsetY - current.offsetY < minDistance) {
-        minDistance = node.offsetY - current.offsetY;
+      if (current.offsetTop < node.offsetTop &&
+          node.offsetTop - current.offsetTop < minDistance) {
+        minDistance = node.offsetTop - current.offsetTop;
         prev = current;
       }
     }
@@ -87,9 +91,7 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
     });
   },
   componentWillMount: function () {
-    children: this._indexChildren(this.props.children)
-//    this.setProps({
-//    });
+    this._indexChildren(this.props.children)
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.children) {
@@ -125,24 +127,22 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
         // update the state
         var id = this.activeNode.getAttribute('data-sortable-id');
         var order = this.state.order;
-        order.splice(order.indexOf(id), 1);
-        if (!position.next) {
-          order.push(id);
-        } else if (!position.prev) {
-          order.unshift(id);
-        } else {
-          var prevIdx =
-            order.indexOf(position.prev.getAttribute('data-sortable-id'));
-          order.splice(prevIdx + 1, 0, id);
+        var afterIdx = order.length;
+        if (position.next) {
+          afterIdx = order.indexOf(position.next.getAttribute('data-sortable-id'));
         }
-        this.setState({
-          order: order
-        });
+        this.setState(React.addons.update(this.state, {
+          order: {
+            $splice: [
+              [order.indexOf(id), 1],
+              [afterIdx, 0, id]
+            ]
+          }
+        }));
       }
     }
   },
   render: function () {
-    console.log(this.state);
     var children = this.state.order.map(function (id) {
       var c = this.sortableMap[id];
       return (
