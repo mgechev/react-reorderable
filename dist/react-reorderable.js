@@ -81,6 +81,7 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       activeItem: null,
       startPosition: null
     });
+    this.props.onDrop(/**/);
   },
   onDrag: function (e) {
     var handle = this.refs.handle.getDOMNode();
@@ -102,6 +103,10 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     this.setState({
       order: order
     });
+    this.props.onDrag(nextPos);
+    if (nextPos !== currentPos) {
+      this.props.onChange();
+    }
   },
   onMouseDown: function (e) {
     this.setState({
@@ -133,6 +138,7 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
         }, function () {
           // React resets the event's properties
           this.refs.handle.handleDragStart(nativeEvent);
+          this.props.onDragStart(this.refs.active);
         }.bind(this));
       }
     }
@@ -145,6 +151,7 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       }
       return React.addons.cloneWithProps(
         this.state.reorderableMap[id], {
+          ref: 'active',
           onMouseDown: this.onMouseDown,
           onMouseMove: this.onMouseMove,
           className: className
@@ -173,6 +180,20 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     );
   }
 });
+
+ReactReorderable.propTypes = {
+  onDragStart: React.PropTypes.func,
+  onDrag: React.PropTypes.func,
+  onDrop: React.PropTypes.func,
+  onChange: React.PropTypes.func
+};
+
+ReactReorderable.defaultProps = {
+  onDragStart: function () {},
+  onDrag: function () {},
+  onDrop: function () {},
+  onChange: function () {}
+};
 
 return ReactReorderable;
 }));

@@ -45,7 +45,19 @@
 <script>
 React.render(
     React.createElement(ReactReorderable, {
-        handle: '.draggable-handle'
+        handle: '.draggable-handle',
+        onDrag: function (data) {
+          console.log('Drag', data);
+        },
+        onDragStart: function (data) {
+          console.log('DragStart', data);
+        },
+        onDrop: function (data) {
+          console.log('Drop', data);
+        },
+        onChange: function (data) {
+          console.log('Change', data);
+        }
       },
       React.createElement('div', {
           className: 'draggable-element'
