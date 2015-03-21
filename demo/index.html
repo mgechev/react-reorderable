@@ -9,7 +9,8 @@
   height: 70px;
   background-color: #990000;
   margin-top: 5px;
-  border: 1px solid #444;
+  border: 3px solid #444;
+  border-radius: 3px;
 }
 .draggable-handle {
   background-color: grey;
@@ -22,8 +23,11 @@
   padding: 10px;
 }
 .react-sortable-item-active {
-  position: relative;
-  visibility: hidden;
+  border: 3px dashed #666;
+  background: none;
+}
+.react-sortable-item-active * {
+  display: none;
 }
 .react-sortable-handle {
   position: absolute;

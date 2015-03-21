@@ -30,61 +30,69 @@ function getNextNode(node) {
   return next;
 }
 
-var ReactSortable = React.createClass({displayName: "ReactSortable",
-  _indexChildren: function (c) {
-    var ids = [];
-    var prefix = 'node-';
-    var id;
-    this.sortableMap = {};
-    for (var i = 0; i < c.length; i += 1) {
-      id = prefix + (i + 1);
-      ids.push(id);
-      c[i] = React.addons.cloneWithProps(c[i], {
-        className: 'react-sortable-item',
-        key: id,
-        'data-sortable-key': id
-      });
-      this.sortableMap[id] = c[i];
-    }
-    this.setState({
-      order: ids
+function indexChildren(children) {
+  var prefix = 'node-';
+  var map = {};
+  var ids = [];
+  for (var i = 0; i < children.length; i += 1) {
+    id = prefix + (i + 1);
+    ids.push(id);
+    children[i] = React.addons.cloneWithProps(children[i], {
+      className: 'react-sortable-item',
+      key: id,
+      'data-sortable-key': id
     });
-  },
+    map[id] = children[i];
+  }
+  return { map: map, ids: ids };
+}
+
+var ReactSortable = React.createClass({displayName: "ReactSortable",
   componentWillMount: function () {
-    this._indexChildren(this.props.children)
-    window.addEventListener('mouseup');
+    var res = indexChildren(this.props.children);
+    this.setState({
+      order: res.ids,
+      sortableMap: res.map
+    });
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.children) {
-      this._indexChildren(nextProps.children);
+      var res = indexChildren(this.props.children);
+      this.setState({
+        order: res.ids,
+        sortableMap: res.map
+      });
     }
   },
   getInitialState: function () {
-    // Our state doesn't depends on activeNode
-    // so it is not required to resides in the state
-    this.activeNode = null;
-    return { order: [], activeItem: null };
+    return { order: [], startPosition: null, activeItem: null, sortableMap: {} };
   },
   onDragStop: function (e) {
     this.setState({
-      activeItem: null
+      activeItem: null,
+      startPosition: null
     });
   },
   onDrag: function (e) {
-    var nextNode = getNextNode(this.refs.handle.getDOMNode());
-    var currentKey = this.refs.handle.getDOMNode().getAttribute('data-sortable-key');
+    var handle = this.refs.handle.getDOMNode();
+    var nextNode = getNextNode(handle);
+    var currentKey = handle.getAttribute('data-sortable-key');
+    var order = this.state.order;
 
-    var currentPos = this.state.order.indexOf(currentKey);
-    this.state.order.splice(currentPos, 1);
+    var currentPos = order.indexOf(currentKey);
+    order.splice(currentPos, 1);
 
     var nextKey = null;
-    var nextPos = this.state.order.length;
+    var nextPos = order.length;
     if (nextNode) {
       nextKey = nextNode.getAttribute('data-sortable-key');
-      nextPos = this.state.order.indexOf(nextKey);
+      nextPos = order.indexOf(nextKey);
     }
 
-    this.state.order.splice(nextPos, 0, currentKey);
+    order.splice(nextPos, 0, currentKey);
+    this.setState({
+      order: order
+    });
   },
   onMouseDown: function (e) {
     this.setState({
@@ -127,17 +135,19 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
       if (this.state.activeItem === id) {
         className += 'react-sortable-item-active';
       }
-      return React.addons.cloneWithProps(this.sortableMap[id], {
-        onMouseDown: this.onMouseDown,
-        onMouseMove: this.onMouseMove,
-        className: className
+      return React.addons.cloneWithProps(
+        this.state.sortableMap[id], {
+          onMouseDown: this.onMouseDown,
+          onMouseMove: this.onMouseMove,
+          className: className
       });
     }, this);
     var handle;
     if (this.state.activeItem) {
       var pos = this.state.startPosition;
-      handle = React.addons.cloneWithProps(this.sortableMap[this.state.activeItem], {
-        className: 'react-sortable-handle'
+      handle = React.addons.cloneWithProps(
+        this.state.sortableMap[this.state.activeItem], {
+          className: 'react-sortable-handle'
       });
       handle =
         React.createElement(ReactDrag, {onStop: this.onDragStop, 
