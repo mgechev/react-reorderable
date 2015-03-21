@@ -46,11 +46,11 @@ function indexChildren(children) {
   for (var i = 0; i < children.length; i += 1) {
     id = prefix + (i + 1);
     ids.push(id);
-    children[i] = React.addons.cloneWithProps(children[i], {
-      className: 'react-reorderable-item',
-      key: id,
-      'data-reorderable-key': id
-    });
+    children[i] =
+      React.createElement("div", {className: "react-reorderable-item", 
+        key: id, "data-reorderable-key": id}, 
+        children[i]
+      );
     map[id] = children[i];
   }
   return { map: map, ids: ids };
@@ -121,15 +121,14 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       if (Math.abs(e.clientX - initial.x) >= 5 ||
           Math.abs(e.clientY - initial.y) >= 5) {
         var node = getClosestReorderable(e.target);
-        var rect = node.getBoundingClientRect();
         var nativeEvent = e.nativeEvent;
         this.activeItem = node;
         this.setState({
           mouseDownPosition: null,
           activeItem: node.getAttribute('data-reorderable-key'),
           startPosition: {
-            x: rect.left,
-            y: rect.top
+            x: node.offsetLeft,
+            y: node.offsetTop
           }
         }, function () {
           // React resets the event's properties
