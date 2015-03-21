@@ -6,19 +6,19 @@ var umd = require('gulp-umd');
 
 gulp.task('watch', function () {
   'use strict';
-  gulp.watch('./lib/react-sortable.js', ['build']);
+  gulp.watch('./lib/react-reorderable.js', ['build']);
 });
 
 gulp.task('react', function () {
   'use strict';
-  return gulp.src(['./lib/react-sortable.js'])
+  return gulp.src(['./lib/react-reorderable.js'])
     .pipe(react())
     .pipe(umd({
       exports: function () {
-        return 'ReactSortable';
+        return 'ReactReorderable';
       },
       namespace: function () {
-        return 'ReactSortable';
+        return 'ReactReorderable';
       },
       dependencies: function () {
         return [
@@ -35,9 +35,9 @@ gulp.task('react', function () {
 
 gulp.task('build', ['react'], function () {
   'use strict';
-  return gulp.src(['./dist/react-sortable.js'])
+  return gulp.src(['./dist/react-reorderable.js'])
     .pipe(uglify())
-    .pipe(rename('react-sortable-min.js'))
+    .pipe(rename('react-reorderable-min.js'))
     .pipe(gulp.dest('./dist'));
 });
 

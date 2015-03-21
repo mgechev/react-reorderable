@@ -1,7 +1,16 @@
-function getClosestSortable(el) {
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['React'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('React'));
+  } else {
+    root.ReactReorderable = factory(root.React);
+  }
+}(this, function(React) {
+function getClosestReorderable(el) {
   while (el) {
     if (el.className &&
-        el.className.indexOf('react-sortable-item') >= 0) {
+        el.className.indexOf('react-reorderable-item') >= 0) {
       return el;
     }
     el = el.parentNode;
@@ -18,8 +27,8 @@ function getNextNode(node) {
   var offsetTop = node.offsetTop;
   for (var i = 0; i < siblings.length; i += 1) {
     current = siblings[i];
-    if (current.getAttribute('data-sortable-key') !==
-        node.getAttribute('data-sortable-key')) {
+    if (current.getAttribute('data-reorderable-key') !==
+        node.getAttribute('data-reorderable-key')) {
       var diff = current.offsetTop - offsetTop;
       if (diff > 0 && diff < minDistance) {
         minDistance = diff;
@@ -38,21 +47,21 @@ function indexChildren(children) {
     id = prefix + (i + 1);
     ids.push(id);
     children[i] = React.addons.cloneWithProps(children[i], {
-      className: 'react-sortable-item',
+      className: 'react-reorderable-item',
       key: id,
-      'data-sortable-key': id
+      'data-reorderable-key': id
     });
     map[id] = children[i];
   }
   return { map: map, ids: ids };
 }
 
-var ReactSortable = React.createClass({
+var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   componentWillMount: function () {
     var res = indexChildren(this.props.children);
     this.setState({
       order: res.ids,
-      sortableMap: res.map
+      reorderableMap: res.map
     });
   },
   componentWillReceiveProps: function (nextProps) {
@@ -60,12 +69,12 @@ var ReactSortable = React.createClass({
       var res = indexChildren(this.props.children);
       this.setState({
         order: res.ids,
-        sortableMap: res.map
+        reorderableMap: res.map
       });
     }
   },
   getInitialState: function () {
-    return { order: [], startPosition: null, activeItem: null, sortableMap: {} };
+    return { order: [], startPosition: null, activeItem: null, reorderableMap: {} };
   },
   onDragStop: function (e) {
     this.setState({
@@ -76,7 +85,7 @@ var ReactSortable = React.createClass({
   onDrag: function (e) {
     var handle = this.refs.handle.getDOMNode();
     var nextNode = getNextNode(handle);
-    var currentKey = handle.getAttribute('data-sortable-key');
+    var currentKey = handle.getAttribute('data-reorderable-key');
     var order = this.state.order;
 
     var currentPos = order.indexOf(currentKey);
@@ -85,7 +94,7 @@ var ReactSortable = React.createClass({
     var nextKey = null;
     var nextPos = order.length;
     if (nextNode) {
-      nextKey = nextNode.getAttribute('data-sortable-key');
+      nextKey = nextNode.getAttribute('data-reorderable-key');
       nextPos = order.indexOf(nextKey);
     }
 
@@ -111,13 +120,13 @@ var ReactSortable = React.createClass({
       }
       if (Math.abs(e.clientX - initial.x) >= 5 ||
           Math.abs(e.clientY - initial.y) >= 5) {
-        var node = getClosestSortable(e.target);
+        var node = getClosestReorderable(e.target);
         var rect = node.getBoundingClientRect();
         var nativeEvent = e.nativeEvent;
         this.activeItem = node;
         this.setState({
           mouseDownPosition: null,
-          activeItem: node.getAttribute('data-sortable-key'),
+          activeItem: node.getAttribute('data-reorderable-key'),
           startPosition: {
             x: rect.left,
             y: rect.top
@@ -133,10 +142,10 @@ var ReactSortable = React.createClass({
     var children = this.state.order.map(function (id) {
       var className = '';
       if (this.state.activeItem === id) {
-        className += 'react-sortable-item-active';
+        className += 'react-reorderable-item-active';
       }
       return React.addons.cloneWithProps(
-        this.state.sortableMap[id], {
+        this.state.reorderableMap[id], {
           onMouseDown: this.onMouseDown,
           onMouseMove: this.onMouseMove,
           className: className
@@ -146,22 +155,25 @@ var ReactSortable = React.createClass({
     if (this.state.activeItem) {
       var pos = this.state.startPosition;
       handle = React.addons.cloneWithProps(
-        this.state.sortableMap[this.state.activeItem], {
-          className: 'react-sortable-handle'
+        this.state.reorderableMap[this.state.activeItem], {
+          className: 'react-reorderable-handle'
       });
       handle =
-        <ReactDrag onStop={this.onDragStop}
-          onDrag={this.onDrag}
-          ref="handle"
-          start={{ x: pos.x, y: pos.y }}>
-          {handle}
-        </ReactDrag>;
+        React.createElement(ReactDrag, {onStop: this.onDragStop, 
+          onDrag: this.onDrag, 
+          ref: "handle", 
+          start: { x: pos.x, y: pos.y}}, 
+          handle
+        );
     }
     return (
-      <div ref="wrapper">
-        {children}
-        {handle}
-      </div>
+      React.createElement("div", {ref: "wrapper"}, 
+        children, 
+        handle
+      )
     );
   }
 });
+
+return ReactReorderable;
+}));

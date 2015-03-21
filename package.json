@@ -1,5 +1,5 @@
 {
-  "name": "react-sortable",
+  "name": "react-reorderable",
   "version": "0.0.1",
   "description": "Sortable component for ReactJS",
   "main": "index.js",
@@ -8,20 +8,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/mgechev/react-sortable.git"
+    "url": "git://github.com/mgechev/react-reorderable.git"
   },
   "keywords": [
     "react",
     "sortable",
+    "reorderable",
     "drag",
     "draggable"
   ],
   "author": "@mgechev",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mgechev/react-sortable/issues"
+    "url": "https://github.com/mgechev/react-reorderable/issues"
   },
-  "homepage": "https://github.com/mgechev/react-sortable",
+  "homepage": "https://github.com/mgechev/react-reorderable",
   "dependencies": {
     "react": "^0.13.1",
     "react-drag": "^0.1.0"

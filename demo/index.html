@@ -22,14 +22,14 @@
   font-size: 60px;
   padding: 10px;
 }
-.react-sortable-item-active {
+.react-reorderable-item-active {
   border: 3px dashed #666;
   background: none;
 }
-.react-sortable-item-active * {
+.react-reorderable-item-active * {
   display: none;
 }
-.react-sortable-handle {
+.react-reorderable-handle {
   position: absolute;
 }
   </style>
@@ -38,10 +38,10 @@
 <div id="content"></div>
 <script src="../node_modules/react/dist/react-with-addons.js"></script>
 <script src="../node_modules/react-drag/dist/react-drag.js"></script>
-<script src="../dist/react-sortable.js"></script>
+<script src="../dist/react-reorderable.js"></script>
 <script>
 React.render(
-    React.createElement(ReactSortable, {
+    React.createElement(ReactReorderable, {
         handle: '.draggable-handle'
       },
       React.createElement('div', {
