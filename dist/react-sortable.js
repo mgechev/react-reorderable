@@ -1,3 +1,12 @@
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['React'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('React'));
+  } else {
+    root.ReactSortable = factory(root.React);
+  }
+}(this, function(React) {
 function getClosestSortable(el) {
   while (el) {
     if (el.className &&
@@ -165,3 +174,6 @@ var ReactSortable = React.createClass({displayName: "ReactSortable",
     );
   }
 });
+
+return ReactSortable;
+}));
