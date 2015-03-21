@@ -1,6 +1,6 @@
 {
   "name": "react-sortable",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Sortable component for ReactJS",
   "main": "index.js",
   "scripts": {
