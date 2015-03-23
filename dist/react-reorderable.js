@@ -7,6 +7,23 @@
     root.ReactReorderable = factory(root.React);
   }
 }(this, function(React) {
+function getScrollTop(node) {
+  return getScroll(node, 'scrollTop');
+}
+
+function getScrollLeft(node) {
+  return getScroll(node, 'scrollLeft');
+}
+
+function getScroll(node, prop) {
+  var result = 0;
+  while (node) {
+    result += node[prop] || 0;
+    node = node.parentNode;
+  }
+  return result;
+}
+
 function getClosestReorderable(el) {
   while (el) {
     if (el.className &&
@@ -24,7 +41,7 @@ function getNextNode(node) {
   var current;
   var minDistance = Infinity;
   var next = null;
-  var offsetTop = node.offsetTop;
+  var offsetTop = node.offsetTop + getScrollTop(node.parentNode);
   for (var i = 0; i < siblings.length; i += 1) {
     current = siblings[i];
     if (current.getAttribute('data-reorderable-key') !==
@@ -81,7 +98,9 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       activeItem: null,
       startPosition: null
     });
-    this.props.onDrop(/**/);
+    this.props.onDrop(this.state.order.map(function (id) {
+      return this.state.reorderableMap[id].props.children;
+    }, this));
   },
   onDrag: function (e) {
     var handle = this.refs.handle.getDOMNode();
@@ -105,7 +124,9 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     });
     this.props.onDrag(nextPos);
     if (nextPos !== currentPos) {
-      this.props.onChange();
+      this.props.onChange(this.state.order.map(function (id) {
+        return this.state.reorderableMap[id].props.children;
+      }, this));
     }
   },
   onMouseDown: function (e) {
@@ -128,12 +149,13 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
         var node = getClosestReorderable(e.target);
         var nativeEvent = e.nativeEvent;
         this.activeItem = node;
+        console.log('Top', getScrollTop(node));
         this.setState({
           mouseDownPosition: null,
           activeItem: node.getAttribute('data-reorderable-key'),
           startPosition: {
-            x: node.offsetLeft,
-            y: node.offsetTop
+            x: node.offsetLeft - getScrollLeft(node),
+            y: node.offsetTop - getScrollTop(node)
           }
         }, function () {
           // React resets the event's properties

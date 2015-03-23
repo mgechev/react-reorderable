@@ -2,6 +2,15 @@
 
 Sortable component for ReactJS
 
+# API
+
+## Events
+
+- `onDragStart`
+- `onDrag`
+- `onDrop`
+- `onChange`
+
 # Notes
 
 It does not follow the facebook's recommendations (not built with flux).
