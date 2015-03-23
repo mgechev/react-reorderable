@@ -35,19 +35,33 @@
 .react-reorderable-handle {
   position: absolute;
 }
+#content {
+  float: left;
+}
+#events {
+  max-height: 300px;
+  width: 200px;
+  overflow: auto;
+  float: right;
+}
+.wrapper {
+  width: 600px;
+}
   </style>
 </head>
 <body>
-<div id="content"></div>
-<div id="events">
+<div class="wrapper">
+  <div id="content"></div>
+  <div id="events"></div>
 </div>
-<script src="../node_modules/react/dist/react-with-addons.js"></script>
-<script src="../node_modules/react-drag/dist/react-drag.js"></script>
-<script src="../dist/react-reorderable.js"></script>
+<script src="./node_modules/react/dist/react-with-addons.js"></script>
+<script src="./node_modules/react-drag/dist/react-drag.js"></script>
+<script src="./dist/react-reorderable.js"></script>
 <script>
 function addRow(data) {
   var el = document.getElementById('events');
   el.innerHTML += '<br>' + data;
+  el.scrollTop = Infinity;
 }
 
 function getLabel(node) {
