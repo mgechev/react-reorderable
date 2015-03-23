@@ -1,8 +1,12 @@
 # React Sortable
 
-Sortable component for ReactJS
+Sortable component for ReactJS. Demo [here](https://mgechev.github.io/react-reorderable/).
 
 # API
+
+## Properties
+
+- `handle` - a selector, which provides the handle element
 
 ## Events
 
@@ -11,16 +15,9 @@ Sortable component for ReactJS
 - `onDrop`
 - `onChange`
 
-# Notes
-
-It does not follow the facebook's recommendations (not built with flux).
-
-For better, well design drag & drop plugin (with sortable demo), take a look at [react-dnd](https://github.com/gaearon/react-dnd/).
-
 # Roadmap
 
 - Allow sorting of items inside a grid layout
-- Add handle property
 
 # License
 
