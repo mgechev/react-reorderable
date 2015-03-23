@@ -38,28 +38,33 @@
   </style>
 </head>
 <body>
-<div style="height: 300px; overflow: auto;">
-  <div style="height: 300px;"></div>
-  <div id="content"></div>
+<div id="content"></div>
+<div id="events">
 </div>
 <script src="../node_modules/react/dist/react-with-addons.js"></script>
 <script src="../node_modules/react-drag/dist/react-drag.js"></script>
 <script src="../dist/react-reorderable.js"></script>
 <script>
+function addRow(data) {
+  var el = document.getElementById('events');
+  el.innerHTML += '<br>' + data;
+}
+
+function getLabel(node) {
+  return node.props.children[1].props.children
+}
+
 React.render(
     React.createElement(ReactReorderable, {
         handle: '.draggable-handle',
-        onDrag: function (data) {
-          console.log('Drag', data);
-        },
         onDragStart: function (data) {
-          console.log('DragStart', data);
+          addRow('Drag start: ' + getLabel(data.props.children));
         },
         onDrop: function (data) {
-          console.log('Drop', data);
+          addRow('Drop: ' + data.map(getLabel).join(', '));
         },
         onChange: function (data) {
-          console.log('Change', data);
+          addRow('Change: ' + data.map(getLabel).join(', '));
         }
       },
       React.createElement('div', {

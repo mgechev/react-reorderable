@@ -73,6 +73,16 @@ function indexChildren(children) {
   return { map: map, ids: ids };
 }
 
+function is(elem, selector) {
+  var matches = elem.parentNode.querySelectorAll(selector);
+  for (var i = 0; i < matches.length; i += 1) {
+    if (elem === matches[i]) {
+      return true;
+    }
+  }
+  return false;
+}
+
 var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   componentWillMount: function () {
     var res = indexChildren(this.props.children);
@@ -80,6 +90,11 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       order: res.ids,
       reorderableMap: res.map
     });
+    window.addEventListener('mouseup', function () {
+      this.setState({
+        mouseDownPosition: null
+      });
+    }.bind(this));
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.children) {
@@ -130,12 +145,14 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     }
   },
   onMouseDown: function (e) {
-    this.setState({
-      mouseDownPosition: {
-        x: e.clientX,
-        y: e.clientY
-      }
-    });
+    if (!this.props.handle || is(e.target, this.props.handle)) {
+      this.setState({
+        mouseDownPosition: {
+          x: e.clientX,
+          y: e.clientY
+        }
+      });
+    }
   },
   onMouseMove: function (e) {
     if (!this.state.activeItem) {
@@ -148,25 +165,26 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
           Math.abs(e.clientY - initial.y) >= 5) {
         var node = getClosestReorderable(e.target);
         var nativeEvent = e.nativeEvent;
+        var id = node.getAttribute('data-reorderable-key');
+        // React resets the event's properties
+        this.props.onDragStart(this.state.reorderableMap[id]);
         this.activeItem = node;
         this.setState({
           mouseDownPosition: null,
-          activeItem: node.getAttribute('data-reorderable-key'),
+          activeItem: id,
           startPosition: {
             x: node.offsetLeft - getScrollLeft(node),
             y: node.offsetTop - getScrollTop(node)
           }
         }, function () {
-          // React resets the event's properties
           this.refs.handle.handleDragStart(nativeEvent);
-          this.props.onDragStart(this.refs.active);
         }.bind(this));
       }
     }
   },
   render: function () {
     var children = this.state.order.map(function (id) {
-      var className = '';
+      var className = (this.state.activeItem) ? 'noselect ' : '';
       if (this.state.activeItem === id) {
         className += 'react-reorderable-item-active';
       }
