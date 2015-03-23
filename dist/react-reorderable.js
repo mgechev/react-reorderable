@@ -83,7 +83,7 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.children) {
-      var res = indexChildren(this.props.children);
+      var res = indexChildren(nextProps.children);
       this.setState({
         order: res.ids,
         reorderableMap: res.map
@@ -149,7 +149,6 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
         var node = getClosestReorderable(e.target);
         var nativeEvent = e.nativeEvent;
         this.activeItem = node;
-        console.log('Top', getScrollTop(node));
         this.setState({
           mouseDownPosition: null,
           activeItem: node.getAttribute('data-reorderable-key'),
