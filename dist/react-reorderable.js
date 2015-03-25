@@ -241,19 +241,17 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       if (Math.abs(e.clientX - initial.x) >= 5 ||
           Math.abs(e.clientY - initial.y) >= 5) {
         var node = getClosestReorderable(e.target);
-        var rect = node.getBoundingClientRect();
         var nativeEvent = e.nativeEvent;
         var id = node.getAttribute('data-reorderable-key');
         // React resets the event's properties
         this.props.onDragStart(this.state.reorderableMap[id]);
         this.activeItem = node;
-        console.log(rect.left + getScrollLeft(node.parentNode));
         this.setState({
           mouseDownPosition: null,
           activeItem: id,
           startPosition: {
-            x: rect.left + getScrollLeft(node.parentNode),
-            y: rect.top + getScrollTop(node.parentNode)
+            x: node.offsetLeft + getScrollLeft(node.parentNode),
+            y: node.offsetTop + getScrollTop(node.parentNode)
           }
         }, function () {
           this.refs.handle.handleDragStart(nativeEvent);
@@ -315,4 +313,3 @@ ReactReorderable.defaultProps = {
 
 return ReactReorderable;
 }));
-
