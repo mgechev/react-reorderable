@@ -22,6 +22,7 @@ React.render(
 ## Properties
 
 - `handle` - a selector, which provides the handle element
+- `mode` - `grid` or `list`, `list` will work in the general case but `grid` is eventually smarter for grid layout
 
 ## Events
 
@@ -29,10 +30,6 @@ React.render(
 - `onDrag`
 - `onDrop`
 - `onChange`
-
-# Roadmap
-
-- Allow sorting of items inside a grid layout
 
 # License
 
