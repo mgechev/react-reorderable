@@ -35,36 +35,64 @@ function getClosestReorderable(el) {
   return null;
 }
 
-function isMouseOver(node, e) {
-  var posTop = node.offsetTop - getScrollTop(node.parentNode);
-  var posLeft = node.offsetLeft - getScrollLeft(node.parentNode);
-  if ((posTop + node.offsetHeight > e.clientY &&
-       posTop < e.clientY) &&
-      (posLeft + node.offsetWidth > e.clientX &&
-       posLeft < e.clientX)) {
-    return true;
+// function isItemOver(node, current) {
+//   var ax1 = node.offsetLeft;
+//   var ay1 = node.offsetTop;
+//   var ax2 = ax1 + node.offsetWidth;
+//   var ay2 = ay1 + node.offsetHeight;
+//   var bx1 = current.offsetLeft;
+//   var by1 = current.offsetTop;
+//   var bx2 = bx1 + current.offsetWidth;
+//   var by2 = by1 + current.offsetHeight;
+//   var widthIntersection = Math.max(0, Math.min(ax2, bx2) - Math.max(ax1, bx1));
+//   var heightIntersection = Math.max(0, Math.min(ay2, by2) - Math.max(ay1, by1));
+//   var intersection = widthIntersection * heightIntersection;
+//   return (intersection / (node.offsetHeight * node.offsetWidth)) >= 0.3;
+// }
+
+var SIBLING_TYPES = {
+  NONE: 0,
+  NEXT: 1,
+  PREVIOUS: 2
+};
+
+function getSiblingType(e, node) {
+  var nodeTop = node.offsetTop - getScrollTop(node.parentNode);
+  var nodeLeft = node.offsetLeft - getScrollLeft(node.parentNode);
+  var width = node.offsetWidth;
+  var height = node.offsetHeight;
+  if (e.pageY < nodeTop || e.pageY > nodeTop + height) {
+    return SIBLING_TYPES.NONE;
   }
-  return false;
+  if (e.pageX > nodeLeft && e.pageX < nodeLeft + 1 / 2 * width) {
+    return SIBLING_TYPES.NEXT;
+  }
+  if (e.pageX > nodeLeft + 1 / 2 * width && e.pageX < nodeLeft + width) {
+    return SIBLING_TYPES.PREVIOUS;
+  }
+  return SIBLING_TYPES.NONE;
 }
 
-function getNextNode(e, node) {
+function getSiblingNode(e, node) {
   var p = node.parentNode;
   var siblings = p.children;
   var current;
   var done = false;
-  var next = null;
+  var result = {};
   for (var i = 0; i < siblings.length && !done; i += 1) {
     current = siblings[i];
     if (current.getAttribute('data-reorderable-key') !==
         node.getAttribute('data-reorderable-key')) {
       // The cursor should be around the middle of the item
-      if (isMouseOver(current, e)) {
-        next = current;
-        done = true;
+      var siblingType = getSiblingType(e, current);
+      if (siblingType !== SIBLING_TYPES.NONE) {
+        result.node = current;
+        result.type = siblingType;
+        return result;
       }
     }
   }
-  return next;
+  return result;
 }
 
 
@@ -93,6 +121,20 @@ function is(elem, selector) {
     }
   }
   return false;
+}
+
+function getNodesOrder(current, sibling, order) {
+  var currentKey = current.getAttribute('data-reorderable-key');
+  var currentPos = order.indexOf(currentKey);
+  order.splice(currentPos, 1);
+  var siblingKey = sibling.node.getAttribute('data-reorderable-key');
+  var siblingKeyPos = order.indexOf(siblingKey);
+  if (sibling.type === SIBLING_TYPES.PREVIOUS) {
+    order.splice(siblingKeyPos + 1, 0, currentKey);
+  } else {
+    order.splice(siblingKeyPos, 0, currentKey);
+  }
+  return order;
 }
 
 var ReactReorderable = React.createClass({displayName: "ReactReorderable",
@@ -131,38 +173,13 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   },
   onDrag: function (e) {
     var handle = this.refs.handle.getDOMNode();
-    var nextNode = getNextNode(e, handle);
-    if (!nextNode) {
-      var parentNode = getClosestReorderable(handle).parentNode;
-      var posTop = parentNode.offsetHeight +
-        parentNode.offsetTop - getScrollTop(parentNode.parentNode);
-      // Same thing about width?
-      if (e.clientY < posTop) {
-        return;
-      }
-    }
-    var currentKey = handle.getAttribute('data-reorderable-key');
-    var order = this.state.order;
+    var sibling = getSiblingNode(e, handle);
 
-    var currentPos = order.indexOf(currentKey);
-    order.splice(currentPos, 1);
-
-    var nextKey = null;
-    var nextPos = order.length;
-    if (nextNode) {
-      nextKey = nextNode.getAttribute('data-reorderable-key');
-      nextPos = order.indexOf(nextKey);
-    }
-
-    order.splice(nextPos, 0, currentKey);
-    this.setState({
-      order: order
-    });
-    this.props.onDrag(nextPos);
-    if (nextPos !== currentPos) {
-      this.props.onChange(this.state.order.map(function (id) {
-        return this.state.reorderableMap[id].props.children;
-      }, this));
+    if (sibling && sibling.node) {
+      var order = getNodesOrder(getClosestReorderable(handle), sibling, this.state.order);
+      this.setState({
+        order: order
+      });
     }
   },
   onMouseDown: function (e) {

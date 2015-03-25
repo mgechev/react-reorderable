@@ -25,6 +25,13 @@
   font-size: 60px;
   padding: 10px;
 }
+#content {
+  width: 332px;
+}
+.react-reorderable-item {
+  display: inline-block;
+  margin-right: 10px;
+}
 .react-reorderable-item-active {
   border: 3px dashed #666;
   background: none;
@@ -93,7 +100,7 @@ React.render(
       ),
       React.createElement('div', {
           className: 'draggable-element'
-        }, null, React.createElement('div', { className: 'draggable-handle' }, 6)
+        }, null, React.createElement('div', { className: 'draggable-handle' }, 7)
       )
   )
 , document.getElementById('content'));
