@@ -199,7 +199,19 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     var sibling = getSiblingNode(e, handle, this.props.mode);
 
     if (sibling && sibling.node) {
+      var oldOrder = this.state.order.slice();
       var order = getNodesOrder(getClosestReorderable(handle), sibling, this.state.order);
+      var changed = false;
+      for (var i = 0; i < order.length && !changed; i += 1) {
+        if (order[i] !== oldOrder[i]) {
+          changed = true;
+        }
+      }
+      if (changed) {
+        this.props.onChange(this.state.order.map(function (id) {
+          return this.state.reorderableMap[id].props.children;
+        }, this));
+      }
       this.setState({
         order: order
       });
