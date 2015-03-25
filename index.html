@@ -35,38 +35,38 @@
 .react-reorderable-handle {
   position: absolute;
 }
-#content {
+.content {
   float: left;
 }
-#events {
-  max-height: 300px;
-  width: 200px;
-  overflow: auto;
+.events {
   float: right;
+  max-height: 100%;
+  overflow: auto;
+  width: 220px;
 }
 .wrapper {
   width: 600px;
+  margin-bottom: 100px;
 }
 #grid-content .react-reorderable-item {
   display: inline-block;
   margin-right: 10px;
 }
 #grid-content {
-  margin-top: 100px;
   width: 340px;
 }
   </style>
 </head>
 <body>
 <a href="https://github.com/mgechev/react-reorderable"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
-<div class="wrapper">
-  <div id="list-content"></div>
-  <div id="list-events"></div>
+<div class="wrapper" style="height: 320px;">
+  <div id="list-content" class="content"></div>
+  <div id="list-events" class="events"></div>
 </div>
 
-<div class="wrapper">
-  <div id="grid-content"></div>
-  <div id="grid-events"></div>
+<div class="wrapper" style="height: 160px;">
+  <div id="grid-content" class="content"></div>
+  <div id="grid-events" class="events"></div>
 </div>
 
 <script src="./node_modules/react/dist/react-with-addons.js"></script>
