@@ -7,23 +7,6 @@
     root.ReactReorderable = factory(root.React);
   }
 }(this, function(React) {
-function getScrollTop(node) {
-  return getScroll(node, 'scrollTop');
-}
-
-function getScrollLeft(node) {
-  return getScroll(node, 'scrollLeft');
-}
-
-function getScroll(node, prop) {
-  var result = 0;
-  while (node) {
-    result += node[prop] || 0;
-    node = node.parentNode;
-  }
-  return result;
-}
-
 function getClosestReorderable(el) {
   while (el) {
     if (el.className &&
@@ -57,10 +40,12 @@ var SIBLING_TYPES = {
 };
 
 function getHorizontalSiblingType(e, node) {
-  var nodeTop = node.offsetTop - getScrollTop(node.parentNode);
-  var nodeLeft = node.offsetLeft - getScrollLeft(node.parentNode);
-  var width = node.offsetWidth;
-  var height = node.offsetHeight;
+  var rect = node.getBoundingClientRect();
+  var nodeTop = rect.top;
+  var nodeLeft = rect.left;
+  var width = rect.width;
+  var height = rect.height;
+
   if (e.pageY < nodeTop || e.pageY > nodeTop + height) {
     return SIBLING_TYPES.NONE;
   }
@@ -74,10 +59,12 @@ function getHorizontalSiblingType(e, node) {
 }
 
 function getVerticalSiblingType(e, node) {
-  var nodeTop = node.offsetTop - getScrollTop(node.parentNode);
-  var nodeLeft = node.offsetLeft - getScrollLeft(node.parentNode);
-  var width = node.offsetWidth;
-  var height = node.offsetHeight;
+  var rect = node.getBoundingClientRect();
+  var nodeTop = rect.top;
+  var nodeLeft = rect.left;
+  var width = rect.width;
+  var height = rect.height;
+
   if (e.pageX < nodeLeft || e.pageX > nodeLeft + width) {
     return SIBLING_TYPES.NONE;
   }
@@ -237,6 +224,7 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       if (Math.abs(e.clientX - initial.x) >= 5 ||
           Math.abs(e.clientY - initial.y) >= 5) {
         var node = getClosestReorderable(e.target);
+        var rect = node.getBoundingClientRect();
         var nativeEvent = e.nativeEvent;
         var id = node.getAttribute('data-reorderable-key');
         // React resets the event's properties
@@ -246,8 +234,8 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
           mouseDownPosition: null,
           activeItem: id,
           startPosition: {
-            x: node.offsetLeft - getScrollLeft(node),
-            y: node.offsetTop - getScrollTop(node)
+            x: rect.left,
+            y: rect.top
           }
         }, function () {
           this.refs.handle.handleDragStart(nativeEvent);
