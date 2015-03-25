@@ -57,34 +57,38 @@ var SIBLING_TYPES = {
 };
 
 function getHorizontalSiblingType(e, node) {
-  var nodeTop = node.offsetTop - getScrollTop(node.parentNode);
-  var nodeLeft = node.offsetLeft - getScrollLeft(node.parentNode);
-  var width = node.offsetWidth;
-  var height = node.offsetHeight;
-  if (e.pageY < nodeTop || e.pageY > nodeTop + height) {
+  var rect = node.getBoundingClientRect();
+  var nodeTop = rect.top;
+  var nodeLeft = rect.left;
+  var width = rect.width;
+  var height = rect.height;
+
+  if (e.clientY < nodeTop || e.clientY > nodeTop + height) {
     return SIBLING_TYPES.NONE;
   }
-  if (e.pageX > nodeLeft && e.pageX < nodeLeft + 1 / 2 * width) {
+  if (e.clientX > nodeLeft && e.clientX < nodeLeft + 1 / 2 * width) {
     return SIBLING_TYPES.NEXT;
   }
-  if (e.pageX > nodeLeft + 1 / 2 * width && e.pageX < nodeLeft + width) {
+  if (e.clientX > nodeLeft + 1 / 2 * width && e.clientX < nodeLeft + width) {
     return SIBLING_TYPES.PREVIOUS;
   }
   return SIBLING_TYPES.NONE;
 }
 
 function getVerticalSiblingType(e, node) {
-  var nodeTop = node.offsetTop - getScrollTop(node.parentNode);
-  var nodeLeft = node.offsetLeft - getScrollLeft(node.parentNode);
-  var width = node.offsetWidth;
-  var height = node.offsetHeight;
-  if (e.pageX < nodeLeft || e.pageX > nodeLeft + width) {
+  var rect = node.getBoundingClientRect();
+  var nodeTop = rect.top;
+  var nodeLeft = rect.left;
+  var width = rect.width;
+  var height = rect.height;
+
+  if (e.clientX < nodeLeft || e.clientX > nodeLeft + width) {
     return SIBLING_TYPES.NONE;
   }
-  if (e.pageY > nodeTop && e.pageY < nodeTop + 1 / 2 * height) {
+  if (e.clientY > nodeTop && e.clientY < nodeTop + 1 / 2 * height) {
     return SIBLING_TYPES.NEXT;
   }
-  if (e.pageY > nodeTop + 1 / 2 * height && e.pageY < nodeTop + height) {
+  if (e.clientY > nodeTop + 1 / 2 * height && e.clientY < nodeTop + height) {
     return SIBLING_TYPES.PREVIOUS;
   }
   return SIBLING_TYPES.NONE;
@@ -237,17 +241,19 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       if (Math.abs(e.clientX - initial.x) >= 5 ||
           Math.abs(e.clientY - initial.y) >= 5) {
         var node = getClosestReorderable(e.target);
+        var rect = node.getBoundingClientRect();
         var nativeEvent = e.nativeEvent;
         var id = node.getAttribute('data-reorderable-key');
         // React resets the event's properties
         this.props.onDragStart(this.state.reorderableMap[id]);
         this.activeItem = node;
+        console.log(rect.left + getScrollLeft(node.parentNode));
         this.setState({
           mouseDownPosition: null,
           activeItem: id,
           startPosition: {
-            x: node.offsetLeft - getScrollLeft(node),
-            y: node.offsetTop - getScrollTop(node)
+            x: rect.left + getScrollLeft(node.parentNode),
+            y: rect.top + getScrollTop(node.parentNode)
           }
         }, function () {
           this.refs.handle.handleDragStart(nativeEvent);
@@ -309,3 +315,4 @@ ReactReorderable.defaultProps = {
 
 return ReactReorderable;
 }));
+
