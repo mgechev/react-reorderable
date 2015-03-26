@@ -250,8 +250,8 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
           mouseDownPosition: null,
           activeItem: id,
           startPosition: {
-            x: node.offsetLeft + getScrollLeft(node.parentNode),
-            y: node.offsetTop + getScrollTop(node.parentNode)
+            x: node.offsetLeft - getScrollLeft(node.parentNode),
+            y: node.offsetTop - getScrollTop(node.parentNode)
           }
         }, function () {
           this.refs.handle.handleDragStart(nativeEvent);
