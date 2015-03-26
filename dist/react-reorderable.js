@@ -7,23 +7,6 @@
     root.ReactReorderable = factory(root.React);
   }
 }(this, function(React) {
-function getScrollTop(node) {
-  return getScroll(node, 'scrollTop');
-}
-
-function getScrollLeft(node) {
-  return getScroll(node, 'scrollLeft');
-}
-
-function getScroll(node, prop) {
-  var result = 0;
-  while (node) {
-    result += node[prop] || 0;
-    node = node.parentNode;
-  }
-  return result;
-}
-
 function getClosestReorderable(el) {
   while (el) {
     if (el.className &&
@@ -246,12 +229,13 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
         // React resets the event's properties
         this.props.onDragStart(this.state.reorderableMap[id]);
         this.activeItem = node;
+        var parentNode = node.parentNode && node.parentNode.parentNode;
         this.setState({
           mouseDownPosition: null,
           activeItem: id,
           startPosition: {
-            x: node.offsetLeft - getScrollLeft(node.parentNode),
-            y: node.offsetTop - getScrollTop(node.parentNode)
+            x: node.offsetLeft - (parentNode && parentNode.scrollLeft || 0),
+            y: node.offsetTop - (parentNode && parentNode.scrollTop || 0)
           }
         }, function () {
           this.refs.handle.handleDragStart(nativeEvent);
@@ -313,3 +297,4 @@ ReactReorderable.defaultProps = {
 
 return ReactReorderable;
 }));
+
