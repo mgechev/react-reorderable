@@ -1,6 +1,6 @@
 {
   "name": "react-reorderable",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Sortable component for ReactJS",
   "main": "index.js",
   "scripts": {
