@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/mgechev/react-reorderable",
   "dependencies": {
-    "react": "^0.13.1",
+    "react": "^0.13.*",
     "react-drag": "^0.1.0"
   },
   "devDependencies": {
