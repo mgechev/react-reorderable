@@ -24,8 +24,13 @@ gulp.task('react', function () {
         return [
           {
             name: 'React',
-            cjs: 'React',
+            cjs: 'react/addons',
             global: 'React'
+          },
+          {
+            name: 'ReactDrag',
+            cjs: 'react-drag',
+            global: 'ReactDrag'
           }
         ];
       }

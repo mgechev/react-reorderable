@@ -1,12 +1,14 @@
 (function(root, factory) {
   if (typeof define === 'function' && define.amd) {
-    define(['React'], factory);
+    define(['React', 'ReactDrag'], factory);
   } else if (typeof exports === 'object') {
-    module.exports = factory(require('React'));
+    module.exports = factory(require('react/addons'), require('react-drag'));
   } else {
-    root.ReactReorderable = factory(root.React);
+    root.ReactReorderable = factory(root.React, root.ReactDrag);
   }
-}(this, function(React) {
+}(this, function(React, ReactDrag) {
+'use strict';
+
 function getClosestReorderable(el) {
   while (el) {
     if (el.className &&
@@ -17,21 +19,6 @@ function getClosestReorderable(el) {
   }
   return null;
 }
-
-// function isItemOver(node, current) {
-//   var ax1 = node.offsetLeft;
-//   var ay1 = node.offsetTop;
-//   var ax2 = ax1 + node.offsetWidth;
-//   var ay2 = ay1 + node.offsetHeight;
-//   var bx1 = current.offsetLeft;
-//   var by1 = current.offsetTop;
-//   var bx2 = bx1 + current.offsetWidth;
-//   var by2 = by1 + current.offsetHeight;
-//   var widthIntersection = Math.max(0, Math.min(ax2, bx2) - Math.max(ax1, bx1));
-//   var heightIntersection = Math.max(0, Math.min(ay2, by2) - Math.max(ay1, by1));
-//   var intersection = widthIntersection * heightIntersection;
-//   return (intersection / (node.offsetHeight * node.offsetWidth)) >= 0.3;
-// }
 
 var SIBLING_TYPES = {
   NONE: 0,
@@ -105,17 +92,16 @@ function getSiblingNode(e, node, mode) {
   return result;
 }
 
-
 function indexChildren(children) {
   var prefix = 'node-';
   var map = {};
   var ids = [];
+  var id;
   for (var i = 0; i < children.length; i += 1) {
     id = prefix + (i + 1);
     ids.push(id);
-    children[i] =
-      React.createElement("div", {className: "react-reorderable-item", 
-        key: id, "data-reorderable-key": id}, 
+    children[i] = React.createElement("div", {className: "react-reorderable-item", 
+         key: id, "data-reorderable-key": id}, 
         children[i]
       );
     map[id] = children[i];
@@ -149,11 +135,6 @@ function getNodesOrder(current, sibling, order) {
 
 var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   componentWillMount: function () {
-    var res = indexChildren(this.props.children);
-    this.setState({
-      order: res.ids,
-      reorderableMap: res.map
-    });
     window.addEventListener('mouseup', function () {
       this.setState({
         mouseDownPosition: null
@@ -170,7 +151,13 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     }
   },
   getInitialState: function () {
-    return { order: [], startPosition: null, activeItem: null, reorderableMap: {} };
+    var res = indexChildren(this.props.children);
+    return {
+      order: res.ids,
+      startPosition: null,
+      activeItem: null,
+      reorderableMap: res.map
+    };
   },
   onDragStop: function (e) {
     this.setState({
