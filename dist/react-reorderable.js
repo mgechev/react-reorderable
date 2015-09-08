@@ -135,11 +135,14 @@ function getNodesOrder(current, sibling, order) {
 
 var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   componentWillMount: function () {
-    window.addEventListener('mouseup', function () {
+    window.addEventListener('mouseup', this._mouseupHandler = function () {
       this.setState({
         mouseDownPosition: null
       });
     }.bind(this));
+  },
+  componentWillUnmount: function () {
+    window.removeEventListener('mouseup', this._mouseupHandler);
   },
   componentWillReceiveProps: function (nextProps) {
     if (nextProps.children) {
