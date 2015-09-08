@@ -98,7 +98,7 @@ function indexChildren(children) {
   var ids = [];
   var id;
   for (var i = 0; i < children.length; i += 1) {
-    id = prefix + (i + 1);
+    var id = prefix + (i + 1);
     ids.push(id);
     children[i] = React.createElement("div", {className: "react-reorderable-item", 
          key: id, "data-reorderable-key": id}, 
@@ -238,6 +238,7 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
       }
       return React.addons.cloneWithProps(
         this.state.reorderableMap[id], {
+          key: 'reaorderable-' + id,
           ref: 'active',
           onMouseDown: this.onMouseDown,
           onMouseMove: this.onMouseMove,
