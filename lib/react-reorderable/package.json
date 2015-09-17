@@ -1,0 +1,61 @@
+{
+  "name": "react-reorderable",
+  "version": "0.1.7",
+  "description": "Sortable component for ReactJS",
+  "main": "dist/react-reorderable.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mgechev/react-reorderable.git"
+  },
+  "keywords": [
+    "react",
+    "sortable",
+    "reorderable",
+    "drag",
+    "draggable"
+  ],
+  "author": {
+    "name": "@mgechev"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mgechev/react-reorderable/issues"
+  },
+  "homepage": "https://github.com/mgechev/react-reorderable",
+  "dependencies": {
+    "react-drag": "^0.1.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-react": "^3.0.1",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.1.0",
+    "gulp-umd": "^0.1.3"
+  },
+  "gitHead": "6e3bb0d1dd3991358d2acb4adf847750b0ee5b3e",
+  "_id": "react-reorderable@0.1.7",
+  "_shasum": "bddbedbc5b48e9396eb8778943e0adb5acaabb21",
+  "_from": "react-reorderable@*",
+  "_npmVersion": "2.7.4",
+  "_nodeVersion": "0.12.2",
+  "_npmUser": {
+    "name": "mgechev",
+    "email": "mgechev@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "mgechev",
+      "email": "mgechev@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "b759e6a86c95ae16bcdfab5adbe726bd707bd585",
+    "tarball": "http://registry.npmjs.org/react-reorderable/-/react-reorderable-0.1.4.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/react-reorderable/-/react-reorderable-0.1.4.tgz",
+  "readme": "ERROR: No README data found!"
+}
