@@ -26,20 +26,29 @@ var SIBLING_TYPES = {
   PREVIOUS: 2
 };
 
+function getControlPosition(e) {
+  var position = (e.touches && e.touches[0]) || e;
+  return {
+    clientX: position.clientX,
+    clientY: position.clientY
+  };
+}
+
 function getHorizontalSiblingType(e, node) {
   var rect = node.getBoundingClientRect();
   var nodeTop = rect.top;
   var nodeLeft = rect.left;
   var width = rect.width;
   var height = rect.height;
+  var position = getControlPosition(e);
 
-  if (e.clientY < nodeTop || e.clientY > nodeTop + height) {
+  if (position.clientY < nodeTop || position.clientY > nodeTop + height) {
     return SIBLING_TYPES.NONE;
   }
-  if (e.clientX > nodeLeft && e.clientX < nodeLeft + 1 / 2 * width) {
+  if (position.clientX > nodeLeft && position.clientX < nodeLeft + 1 / 2 * width) {
     return SIBLING_TYPES.NEXT;
   }
-  if (e.clientX > nodeLeft + 1 / 2 * width && e.clientX < nodeLeft + width) {
+  if (position.clientX > nodeLeft + 1 / 2 * width && position.clientX < nodeLeft + width) {
     return SIBLING_TYPES.PREVIOUS;
   }
   return SIBLING_TYPES.NONE;
@@ -51,14 +60,15 @@ function getVerticalSiblingType(e, node) {
   var nodeLeft = rect.left;
   var width = rect.width;
   var height = rect.height;
+  var position = getControlPosition(e);
 
-  if (e.clientX < nodeLeft || e.clientX > nodeLeft + width) {
+  if (position.clientX < nodeLeft || position.clientX > nodeLeft + width) {
     return SIBLING_TYPES.NONE;
   }
-  if (e.clientY > nodeTop && e.clientY < nodeTop + 1 / 2 * height) {
+  if (position.clientY > nodeTop && position.clientY < nodeTop + 1 / 2 * height) {
     return SIBLING_TYPES.NEXT;
   }
-  if (e.clientY > nodeTop + 1 / 2 * height && e.clientY < nodeTop + height) {
+  if (position.clientY > nodeTop + 1 / 2 * height && position.clientY < nodeTop + height) {
     return SIBLING_TYPES.PREVIOUS;
   }
   return SIBLING_TYPES.NONE;
@@ -133,6 +143,7 @@ function getNodesOrder(current, sibling, order) {
   return order;
 }
 
+
 var ReactReorderable = React.createClass({displayName: "ReactReorderable",
   componentWillMount: function () {
     window.addEventListener('mouseup', this._mouseupHandler = function () {
@@ -195,24 +206,37 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
     }
   },
   onMouseDown: function (e) {
+    var position;
+
     if (!this.props.handle || is(e.target, this.props.handle)) {
+      position = getControlPosition(e);
+
       this.setState({
         mouseDownPosition: {
-          x: e.clientX,
-          y: e.clientY
+          x: position.clientX,
+          y: position.clientY
         }
       });
     }
   },
+  onTouchStart: function(e) {
+    e.preventDefault(); // prevent scrolling
+    this.onMouseDown(e);
+  },
   onMouseMove: function (e) {
+    var position;
+
     if (!this.state.activeItem) {
       var initial = this.state.mouseDownPosition;
       // Still not clicked
       if (!initial) {
         return;
       }
-      if (Math.abs(e.clientX - initial.x) >= 5 ||
-          Math.abs(e.clientY - initial.y) >= 5) {
+
+      position = getControlPosition(e);
+
+      if (Math.abs(position.clientX - initial.x) >= 5 ||
+          Math.abs(position.clientY - initial.y) >= 5) {
         var node = getClosestReorderable(e.target);
         var nativeEvent = e.nativeEvent;
         var id = node.getAttribute('data-reorderable-key');
@@ -245,6 +269,8 @@ var ReactReorderable = React.createClass({displayName: "ReactReorderable",
           ref: 'active',
           onMouseDown: this.onMouseDown,
           onMouseMove: this.onMouseMove,
+          onTouchStart: this.onTouchStart,
+          onTouchMove: this.onMouseMove,
           className: className
       });
     }, this);
