@@ -61,6 +61,8 @@ function getLabel(node) {
   return node.props.children[1].props.children
 }
 
+React.initializeTouchEvents(true);
+
 React.render(
     React.createElement(ReactReorderable, {
         handle: '.draggable-handle',
