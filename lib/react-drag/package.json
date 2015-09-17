@@ -1,0 +1,43 @@
+{
+  "name": "react-drag",
+  "version": "0.1.5",
+  "description": "React draggable component",
+  "main": "dist/react-drag.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mgechev/react-drag.git"
+  },
+  "keywords": [
+    "react",
+    "draggable",
+    "react-component"
+  ],
+  "author": {
+    "name": "Matt Zabriskie"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mgechev/react-drag/issues"
+  },
+  "homepage": "https://github.com/mgechev/react-drag",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-rename": "^1.2.0",
+    "gulp-uglify": "^1.1.0",
+    "gulp-umd": "^0.1.3",
+    "jsx-loader": "^0.12.0",
+    "karma": "^0.12.19",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-cli": "0.0.4",
+    "karma-firefox-launcher": "^0.1.3",
+    "karma-jasmine": "^0.1.5",
+    "react": "^0.13.0"
+  },
+  "readme": "# react-drag\n\nReact draggable component. Fork of [react-draggable](https://github.com/mzabriskie/react-draggable/).\n\n## Installing\n\n```bash\n$ bower install react-drag\n```\n\n## Example\n\n```js\n/** @jsx React.DOM */\nvar React = require('react'),\n  Draggable = require('react-draggable');\n\nvar App = React.createClass({\n  handleStart: function (event, ui) {\n    console.log('Event: ', event);\n    console.log('Position: ', ui.position);\n  },\n\n  handleDrag: function (event, ui) {\n    console.log('Event: ', event);\n        console.log('Position: ', ui.position);\n  },\n\n  handleStop: function (event, ui) {\n    console.log('Event: ', event);\n        console.log('Position: ', ui.position);\n  },\n\n  render: function () {\n    return (\n      // <Draggable/> transparently adds draggable interactivity\n      // to whatever element is supplied as `this.props.children`.\n      // Only a single element is allowed or an Error will be thrown.\n      //\n      // `axis` determines which axis the draggable can move.\n      // - 'both' allows movement horizontally and vertically (default).\n      // - 'x' limits movement to horizontal axis.\n      // - 'y' limits movement to vertical axis.\n      //\n      // `handle` specifies a selector to be used as the handle that initiates drag.\n      //\n      // `cancel` specifies a selector to be used to prevent drag initialization.\n      //\n      // `grid` specifies the x and y that dragging should snap to.\n      //\n      // `start` specifies the x and y that the dragged item should start at\n      //\n      // `bound` specifies the bound rectangle, it may has value \"parent\", which bounds the drag by the parent\n      //\n      // `onStart` is called when dragging starts.\n      //\n      // `onDrag` is called while dragging.\n      //\n      // `onStop` is called when dragging stops.\n\n      <Draggable\n        axis=\"x\"\n        handle=\".handle\"\n        grid={[25, 25]}\n        start={{x: 25, y: 25}}\n        bound={{left: 20, top: 20, bottom: 80, right: 80 }}\n        onStart={this.handleStart}\n        onDrag={this.handleDrag}\n        onStop={this.handleStop}>\n        <div>\n          <div className=\"handle\">Drag from here</div>\n          <div>Lorem ipsum...</div>\n        </div>\n      </Draggable>\n    );\n  }\n});\n\nReact.renderComponent(<App/>, document.body);\n```\n\n## License\n\nMIT",
+  "readmeFilename": "README.md",
+  "gitHead": "df684012c43d3662c61960804a2152d38e815adc",
+  "_id": "react-drag@0.1.5",
+  "scripts": {},
+  "_shasum": "fe48ced551c3b6bc394513e1dd08308138535e3c",
+  "_from": "react-drag@*"
+}
