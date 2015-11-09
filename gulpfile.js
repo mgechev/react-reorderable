@@ -1,48 +1,31 @@
 var gulp = require('gulp');
-var react = require('gulp-react');
-var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');
-var umd = require('gulp-umd');
+var rename = require('gulp-rename');
+var browserify = require('browserify');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
 
-gulp.task('watch', function () {
+gulp.task('minify', ['browserify'], function () {
   'use strict';
-  gulp.watch('./lib/react-reorderable.js', ['build']);
-});
-
-gulp.task('react', function () {
-  'use strict';
-  return gulp.src(['./lib/react-reorderable.js'])
-    .pipe(react())
-    .pipe(umd({
-      exports: function () {
-        return 'ReactReorderable';
-      },
-      namespace: function () {
-        return 'ReactReorderable';
-      },
-      dependencies: function () {
-        return [
-          {
-            name: 'React',
-            cjs: 'react/addons',
-            global: 'React'
-          },
-          {
-            name: 'ReactDrag',
-            cjs: 'react-drag',
-            global: 'ReactDrag'
-          }
-        ];
-      }
-    }))
-    .pipe(gulp.dest('./dist'));
-});
-
-gulp.task('build', ['react'], function () {
-  'use strict';
-  return gulp.src(['./dist/react-reorderable.js'])
+  return gulp.src('./dist/react-reorderable.js')
+    .pipe(rename('ReactReorderable.js'))
     .pipe(uglify())
-    .pipe(rename('react-reorderable-min.js'))
+    .pipe(rename('react-reorderable.min.js'))
     .pipe(gulp.dest('./dist'));
 });
+
+gulp.task('browserify', function () {
+  'use strict';
+  return browserify(['./lib/react-reorderable.js'], {
+      standalone: 'ReactReorderable'
+    })
+    .external(['react', 'react-dom', 'react-drag'])
+    .bundle()
+    .pipe(source('ReactReorderable.js'))
+    .pipe(buffer())
+    .pipe(rename('react-reorderable.js'))
+    .pipe(gulp.dest('./dist'));
+});
+
+gulp.task('default', ['minify']);
 
