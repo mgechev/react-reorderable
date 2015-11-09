@@ -1,8 +1,8 @@
 {
   "name": "react-reorderable",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Sortable component for ReactJS",
-  "main": "dist/react-reorderable.js",
+  "main": "lib/react-reorderable.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
