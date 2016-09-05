@@ -1,6 +1,6 @@
 {
   "name": "react-reorderable",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Sortable component for ReactJS",
   "main": "lib/react-reorderable.js",
   "scripts": {
@@ -45,11 +45,6 @@
     "react": "^0.14.0",
     "react-dom": "^0.14.2",
     "react-drag": "^0.2.4"
-  },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
   },
   "browserify-shim": {
     "react": "global:React",
