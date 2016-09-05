@@ -65,7 +65,7 @@ function getLabel(node) {
 ReactDOM.render(
     React.createElement(ReactReorderable, {
         handle: '.draggable-handle',
-        mode: 'list',
+        mode: 'grid',
         onDragStart: function (data) {
           addRow('Drag start: ' + getLabel(data.props.children));
         },

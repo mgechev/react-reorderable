@@ -42,9 +42,12 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "peerDependencies": {
-    "react": "^0.14.0",
+    "react": "^0.15.0",
     "react-dom": "^0.14.2",
     "react-drag": "^0.2.4"
+  },
+  "browserify": {
+    "transform": ["browserify-shim"]
   },
   "browserify-shim": {
     "react": "global:React",
