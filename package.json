@@ -1,6 +1,6 @@
 {
   "name": "react-reorderable",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Sortable component for ReactJS",
   "main": "lib/react-reorderable.js",
   "scripts": {
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/mgechev/react-reorderable",
   "dependencies": {
-    "react-drag": "^0.2.4",
+    "react-drag": "^0.3.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.2"
   },
@@ -44,7 +44,7 @@
   "peerDependencies": {
     "react": "^0.15.0",
     "react-dom": "^0.14.2",
-    "react-drag": "^0.2.4"
+    "react-drag": "^0.3.0"
   },
   "browserify": {
     "transform": ["browserify-shim"]
