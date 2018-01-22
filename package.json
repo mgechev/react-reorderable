@@ -4,6 +4,7 @@
   "description": "Sortable component for ReactJS",
   "main": "lib/react-reorderable.js",
   "scripts": {
+    "build": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
