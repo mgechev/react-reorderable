@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/mgechev/react-reorderable",
   "dependencies": {
-    "create-react-class": "^15.6.2",
-    "prop-types": "^15.6.0",
+    "create-react-class": "^15.0.0",
+    "prop-types": "^15.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-drag": "^0.3.0"
@@ -44,6 +44,8 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "peerDependencies": {
+    "create-react-class": "^15.0.0",
+    "prop-types": "^15.0.0",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-drag": "^0.3.0"
