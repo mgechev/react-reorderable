@@ -26,9 +26,11 @@
   },
   "homepage": "https://github.com/mgechev/react-reorderable",
   "dependencies": {
-    "react-drag": "^0.3.0",
+    "create-react-class": "^15.6.2",
+    "prop-types": "^15.6.0",
     "react": "^15.0.0",
-    "react-dom": "^15.0.0"
+    "react-dom": "^15.0.0",
+    "react-drag": "^0.3.0"
   },
   "devDependencies": {
     "browserify": "^12.0.1",
@@ -47,7 +49,9 @@
     "react-drag": "^0.3.0"
   },
   "browserify": {
-    "transform": ["browserify-shim"]
+    "transform": [
+      "browserify-shim"
+    ]
   },
   "browserify-shim": {
     "react": "global:React",
