@@ -19,7 +19,7 @@ gulp.task('browserify', function () {
   return browserify(['./lib/react-reorderable.js'], {
       standalone: 'ReactReorderable'
     })
-    .external(['react', 'react-dom', 'react-drag'])
+    .external(['create-react-class', 'prop-types', 'react', 'react-dom', 'react-drag'])
     .bundle()
     .pipe(source('ReactReorderable.js'))
     .pipe(buffer())
