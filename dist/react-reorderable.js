@@ -5,8 +5,8 @@
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var findDOMNode = (typeof window !== "undefined" ? window['ReactDOM'] : typeof global !== "undefined" ? global['ReactDOM'] : null).findDOMNode;
 var ReactDrag = (typeof window !== "undefined" ? window['ReactDrag'] : typeof global !== "undefined" ? global['ReactDrag'] : null);
-var createReactClass = require('create-react-class');
-var propTypes = require('prop-types');
+var createReactClass = (typeof window !== "undefined" ? window['createReactClass'] : typeof global !== "undefined" ? global['createReactClass'] : null);
+var propTypes = (typeof window !== "undefined" ? window['PropTypes'] : typeof global !== "undefined" ? global['PropTypes'] : null);
 
 function getClosestReorderable(el) {
   while (el) {
@@ -321,5 +321,5 @@ module.exports = ReactReorderable;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"create-react-class":"create-react-class","prop-types":"prop-types"}]},{},[1])(1)
+},{}]},{},[1])(1)
 });
