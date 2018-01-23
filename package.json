@@ -52,7 +52,9 @@
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM",
-    "react-drag": "global:ReactDrag"
+    "react-drag": "global:ReactDrag",
+    "prop-types": "global:PropTypes",
+    "create-react-class": "global:createReactClass"
   },
   "maintainers": [
     {
