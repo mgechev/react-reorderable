@@ -1,6 +1,8 @@
 # React Sortable
 
-Sortable component for ReactJS. Demo [here](https://mgechev.github.io/react-reorderable/).
+Sortable component for React. Demo [here](https://mgechev.github.io/react-reorderable/).
+
+Thanks to [@james-ecargo](https://github.com/james-ecargo) for implementing the React 16 support.
 
 # Demo
 
@@ -21,15 +23,15 @@ React.render(
 
 ## Properties
 
-- `handle` - a selector, which provides the handle element
-- `mode` - `grid` or `list`, `list` will work in the general case but `grid` is eventually smarter for grid layout
+* `handle` - a selector, which provides the handle element
+* `mode` - `grid` or `list`, `list` will work in the general case but `grid` is eventually smarter for grid layout
 
 ## Events
 
-- `onDragStart`
-- `onDrag`
-- `onDrop`
-- `onChange`
+* `onDragStart`
+* `onDrag`
+* `onDrop`
+* `onChange`
 
 # License
 
