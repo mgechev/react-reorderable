@@ -26,13 +26,6 @@
     "url": "https://github.com/mgechev/react-reorderable/issues"
   },
   "homepage": "https://github.com/mgechev/react-reorderable",
-  "dependencies": {
-    "create-react-class": "^15.0.0",
-    "prop-types": "^15.0.0",
-    "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0",
-    "react-drag": "^1.0.0"
-  },
   "devDependencies": {
     "browserify": "^12.0.1",
     "browserify-shim": "^3.8.11",
