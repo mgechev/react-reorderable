@@ -5,6 +5,8 @@
 var React = (typeof window !== "undefined" ? window['React'] : typeof global !== "undefined" ? global['React'] : null);
 var findDOMNode = (typeof window !== "undefined" ? window['ReactDOM'] : typeof global !== "undefined" ? global['ReactDOM'] : null).findDOMNode;
 var ReactDrag = (typeof window !== "undefined" ? window['ReactDrag'] : typeof global !== "undefined" ? global['ReactDrag'] : null);
+var createReactClass = (typeof window !== "undefined" ? window['createReactClass'] : typeof global !== "undefined" ? global['createReactClass'] : null);
+var propTypes = (typeof window !== "undefined" ? window['PropTypes'] : typeof global !== "undefined" ? global['PropTypes'] : null);
 
 function getClosestReorderable(el) {
   while (el) {
@@ -141,8 +143,7 @@ function getNodesOrder(current, sibling, order) {
   return order;
 }
 
-
-var ReactReorderable = React.createClass({
+var ReactReorderable = createReactClass({
   componentWillMount: function () {
     window.addEventListener('mouseup', this._mouseupHandler = function () {
       this.setState({
@@ -303,10 +304,10 @@ var ReactReorderable = React.createClass({
 });
 
 ReactReorderable.propTypes = {
-  onDragStart: React.PropTypes.func,
-  onDrag: React.PropTypes.func,
-  onDrop: React.PropTypes.func,
-  onChange: React.PropTypes.func
+  onDragStart: propTypes.func,
+  onDrag: propTypes.func,
+  onDrop: propTypes.func,
+  onChange: propTypes.func
 };
 
 ReactReorderable.defaultProps = {
