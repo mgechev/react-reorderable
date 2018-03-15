@@ -1,10 +1,10 @@
 {
   "name": "react-reorderable",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Sortable component for ReactJS",
   "main": "react-reorderable.js",
   "scripts": {
-    "build": "gulp && cp package.json dist",
+    "build": "gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
