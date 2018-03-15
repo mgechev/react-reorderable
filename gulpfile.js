@@ -20,6 +20,7 @@ gulp.task('browserify', function () {
       standalone: 'ReactReorderable'
     })
     .external(['create-react-class', 'prop-types', 'react', 'react-dom', 'react-drag'])
+    .transform("browserify-shim")
     .bundle()
     .pipe(source('ReactReorderable.js'))
     .pipe(buffer())

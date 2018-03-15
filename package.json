@@ -49,11 +49,6 @@
     "react-dom": "^15.0.0 || ^16.0.0",
     "react-drag": "^2.0.0"
   },
-  "browserify": {
-    "transform": [
-      "browserify-shim"
-    ]
-  },
   "browserify-shim": {
     "react": "global:React",
     "react-dom": "global:ReactDOM",
